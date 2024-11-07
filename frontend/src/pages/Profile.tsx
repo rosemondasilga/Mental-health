@@ -10,9 +10,9 @@ const Profile: React.FC = () => {
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loginHistory] = useState([
-    { date: '2023-10-01', location: 'New York, USA', device: 'Chrome on Windows' },
-    { date: '2023-09-15', location: 'San Francisco, USA', device: 'Safari on iPhone' },
-    { date: '2023-08-25', location: 'London, UK', device: 'Firefox on Mac' },
+    { date: '2023-10-01', location: 'Bumbogo, Kigali', device: 'Chrome on Windows' },
+    { date: '2023-09-15', location: 'Kibagabaga, Kigali', device: 'Safari on iPhone' },
+    { date: '2023-08-25', location: 'Zindiro, Kigali', device: 'Firefox on Mac' },
   ]);
   const [activities] = useState([
     { date: '2023-10-02', description: 'Completed mental wellness assessment.' },

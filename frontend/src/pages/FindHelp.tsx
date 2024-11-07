@@ -18,6 +18,15 @@ const FindHelp: React.FC = () => {
   const facilities = [
     {
       id: '1',
+      name: 'ALU Wellness Center',
+      address: 'Bumbogo, Kigali Innovation City, Next to Azam, RW',
+      phone: '+250-784-650-219',
+      Email: 'wellness@alueducation.com',
+      description: 'Creating a culture of curiosity for knowlegde, support for one another and urgency for wellness through our programs.',
+      category: 'General Wellness & Counseling',
+    },
+    {
+      id: '2',
       name: 'Sun city therapy Kigali',
       address: '123 Wellness St, Kigali, RW',
       phone: '555-123-4567',
@@ -25,12 +34,13 @@ const FindHelp: React.FC = () => {
       category: 'Mental Health',
     },
     {
-      id: '2',
+      id: '3',
       name: 'King Faisal Therapy Center',
-      address: '456 Health Ave,  Kigali, RW',
-      phone: '555-987-6543',
+      address: 'KG 544 Street 10, Kacyiru, Gasabo, Kigali,',
+      phone: '+250-788-123-200',
+      Email: 'info@kfhkigali.com',
       description: 'Offers counseling and mental health support.',
-      category: 'Counseling',
+      category: 'Medical Hospital',
     },
   ];
 

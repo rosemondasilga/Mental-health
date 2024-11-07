@@ -59,10 +59,10 @@ const Navbar: React.FC<{ toggleSidebar: () => void }> = ({ toggleSidebar }) => {
                   EN
                 </button>
                 <button
-                  onClick={() => changeLanguage('FR')}
+                  onClick={() => changeLanguage('KR')}
                   className="block w-full text-left px-4 py-2 hover:bg-gray-200"
                 >
-                  FR
+                  KR
                 </button>
               </div>
             )}
