@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // For navigation links
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import Header from '../components/Header';
 import { FcGoogle } from "react-icons/fc";
+import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../../../frontend/src/firebase/auth.js';
+import { useAuth } from '../context/authContext/index.js';
 
 const Login: React.FC = () => {
+  const { userLoggedIn } = useAuth();
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<any>({}); // State to store validation errors
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const validateForm = () => {
-    const newErrors: any = {};
+    const newErrors: { [key: string]: string } = {};
 
     // Simple email regex for validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,21 +35,44 @@ const Login: React.FC = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formErrors = validateForm();
     setErrors(formErrors);
 
-    // If there are no errors, proceed with form submission
-    if (Object.keys(formErrors).length === 0) {
-      console.log('Form submitted successfully:', { email, password });
-      // Add your form submission logic here (e.g., API call)
+    if (Object.keys(formErrors).length === 0 && !isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        await doSignInWithEmailAndPassword(email, password);
+        // Redirect to the dashboard on successful sign-in
+        navigate('/dashboard');
+      } catch (error: any) {
+        setErrorMessage(error.message);
+      } finally {
+        setIsSigningIn(false);
+      }
+    }
+  };
+
+  const onGoogleSignIn = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        await doSignInWithGoogle();
+        // Redirect to the dashboard on successful Google sign-in
+        navigate('/dashboard');
+      } catch (error: any) {
+        setErrorMessage(error.message);
+      } finally {
+        setIsSigningIn(false);
+      }
     }
   };
 
   return (
-    <div className=''>
+    <div>
       <div className='top-0 sticky'>
         <Header />
       </div>
@@ -50,9 +80,11 @@ const Login: React.FC = () => {
         <div className="bg-white p-8 rounded-lg w-full max-w-xl">
           <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">Sign In</h2>
           <p className='text-gray-400 mb-4 text-center'>Welcome back, sign into your account</p>
+          {errorMessage && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
           <button
             type="button"
             className="flex items-center justify-center px-4 py-3 bg-[#fff] text-[#002266] border gap-2 rounded-full font-medium hover:bg-[#002266] hover:text-white mx-auto transition mb-4"
+            onClick={onGoogleSignIn}
           >
             <FcGoogle size={24} />
             Continue with Google
@@ -79,23 +111,21 @@ const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 border-t-0 border-l-0 border-r-0 focus:outline-none focus:border-[#002266]"
-                placeholder="• • • • • • • • • "
+                placeholder="Enter your password"
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
-            <div>
-              <button
-                type="submit"
-                className="w-full py-3 bg-[#002266] text-white rounded-full font-medium hover:bg-blue-900 transition"
-              >
-                Login
-              </button>
-            </div>
-            <div className="text-center text-gray-600">
-              Don’t have an account?{' '}
-              <Link to="/signup" className="text-[#9835ff] font-bold hover:underline">Sign Up</Link>
-            </div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-[#002266] text-white font-semibold rounded-full hover:bg-[#001b4f] transition"
+              disabled={isSigningIn}
+            >
+              {isSigningIn ? 'Signing In...' : 'Sign In'}
+            </button>
           </form>
+          <p className="text-center text-gray-600 mt-6">
+            Don't have an account? <Link to="/signup" className="text-[#002266] font-medium">Sign Up</Link>
+          </p>
         </div>
       </div>
     </div>

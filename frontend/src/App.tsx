@@ -12,35 +12,34 @@ import FacilityDetails from './pages/FacilityDetails';
 import Settings from './pages/Settings';
 import Profile from './pages/Profile';
 import BookTherapy from './pages/BookTherapy';
-import AccessResources from './pages/AccessResources';
 import JoinSupportGroup from './pages/JoinSupportGroup';
 import AssessmentPage from './pages/AssessmentPage';
+import { AuthProvider } from './context/authContext';
 
 
 function App() {
-
   return (
-    <BrowserRouter>
-   
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/content" element={<Content />} />
-      <Route path="/blog/:id" element={<BlogDetails />} />
-      <Route path="/event/:id" element={<EventDetails />} />
-      <Route path="/find-help" element={<FindHelp />} />
-      <Route path="/facility/:id" element={<FacilityDetails />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/book-therapy" element={<BookTherapy />} />
-      <Route path="support-group" element={<JoinSupportGroup />} />
-      <Route path="assesments" element={<AssessmentPage />} />
-    </Routes>
-  </BrowserRouter>
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/content" element={<Content />} />
+          <Route path="/blog/:id" element={<BlogDetails />} />
+          <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/find-help" element={<FindHelp />} />
+          <Route path="/facility/:id" element={<FacilityDetails />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/book-therapy" element={<BookTherapy />} />
+          <Route path="support-group" element={<JoinSupportGroup />} />
+          <Route path="assessments" element={<AssessmentPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
-
 export default App

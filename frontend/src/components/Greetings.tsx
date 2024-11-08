@@ -1,7 +1,8 @@
-// src/components/Greeting.tsx
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/authContext';
 
 const Greeting: React.FC = () => {
+  const { currentUser } = useAuth(); // Assuming user contains the logged-in user details
   const [greeting, setGreeting] = useState<string>('Hello');
 
   // Function to get the appropriate greeting based on local time
@@ -31,7 +32,9 @@ const Greeting: React.FC = () => {
 
   return (
     <div className="">
-      <h1 className="text-2xl font-semibold text-gray-800">{greeting}! <span className='text-[#002266]'>Princess</span></h1>
+      <h1 className="text-2xl font-semibold text-gray-800">
+        {greeting}! <span className='text-[#002266] '>{currentUser.displayName ? currentUser.displayName : currentUser.email }</span>
+      </h1>
       <p className="text-gray-600">How are you feeling today?</p>
       <button className='mt-2 bg-[#002266] text-white p-2 rounded shadow-md'>Talk with someone?</button>
     </div>

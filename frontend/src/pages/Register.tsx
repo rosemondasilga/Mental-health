@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate for redirection after sign up
 import Header from '../components/Header';
 import { FcGoogle } from 'react-icons/fc'; // Google icon from react-icons
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../../../frontend/src/firebase/auth.js'; // Firebase functions
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('');
@@ -9,7 +10,10 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<any>({}); // Store validation errors
+  const [isRegistering, setIsRegistering] = useState(false); // For tracking the loading state during registration
+  const navigate = useNavigate(); // For redirecting after successful sign-up
 
+  // Form validation logic
   const validateForm = () => {
     const newErrors: any = {};
     if (!name.trim()) {
@@ -35,21 +39,56 @@ const SignUp: React.FC = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formErrors = validateForm();
     setErrors(formErrors);
 
-    // If no errors, form is valid
-    if (Object.keys(formErrors).length === 0) {
-      console.log('Form submitted successfully:', { name, email, password });
-      // You can proceed with form submission logic here (e.g., send data to backend)
+    if (Object.keys(formErrors).length === 0 && !isRegistering) {
+      setIsRegistering(true);
+      try {
+        // Create user using Firebase
+        await doCreateUserWithEmailAndPassword(email, password);
+        // After successful registration, navigate to the dashboard
+        navigate('/dashboard');
+      } catch (error: any) {
+        // Handle Firebase errors and show custom messages
+        if (error.code === 'auth/invalid-email') {
+          setErrors({ firebase: 'The email address is not valid. Please try again.' });
+        } else if (error.code === 'auth/wrong-password') {
+          setErrors({ firebase: 'Incorrect password. Please try again.' });
+        } else if (error.code === 'auth/email-already-in-use') {
+          setErrors({ firebase: 'This email is already in use. Please choose another one.' });
+        } else {
+          setErrors({ firebase: 'An error occurred. Please try again later.' });
+        }
+      } finally {
+        setIsRegistering(false);
+      }
+    }
+  };
+
+  // Google sign-in handler
+  const onGoogleSignIn = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isRegistering) {
+      setIsRegistering(true);
+      try {
+        await doSignInWithGoogle();
+        // Navigate to dashboard after Google sign-in
+        navigate('/dashboard');
+      } catch (error: any) {
+        setErrors({ firebase: error.message });
+      } finally {
+        setIsRegistering(false);
+      }
     }
   };
 
   return (
-    <div className="">
+    <div>
       <div className="top-0 sticky">
         <Header />
       </div>
@@ -62,6 +101,7 @@ const SignUp: React.FC = () => {
           <button
             type="button"
             className="flex items-center justify-center px-4 py-3 bg-[#fff] text-[#002266] border gap-2 rounded-full font-medium hover:bg-[#002266] hover:text-white mx-auto transition mb-4"
+            onClick={onGoogleSignIn}
           >
             <FcGoogle size={24} />
             Continue with Google
@@ -79,7 +119,6 @@ const SignUp: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 border-t-0 border-l-0 border-r-0 focus:outline-none focus:border-[#002266]"
                 placeholder="Enter your name"
-               
               />
               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
             </div>
@@ -94,7 +133,6 @@ const SignUp: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 border-t-0 border-l-0 border-r-0 focus:outline-none focus:border-[#002266]"
                 placeholder="example@gmail.com"
-              
               />
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
@@ -109,7 +147,6 @@ const SignUp: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 border-t-0 border-l-0 border-r-0 focus:outline-none focus:border-[#002266]"
                 placeholder="• • • • • • • • • "
-               
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
@@ -124,18 +161,21 @@ const SignUp: React.FC = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="mt-1 block w-full p-3 border border-gray-300 border-t-0 border-l-0 border-r-0 focus:outline-none focus:border-[#002266]"
                 placeholder="• • • • • • • • • "
-               
               />
               {errors.confirmPassword && (
                 <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
               )}
             </div>
+            {errors.firebase && (
+              <p className="text-red-500 text-sm text-center bg-blue-200 p-2 rounded">{errors.firebase}</p>
+            )}
             <div>
               <button
                 type="submit"
                 className="w-full py-3 bg-[#002266] text-white rounded-full font-medium hover:bg-blue-900 transition"
+                disabled={isRegistering}
               >
-                Sign Up
+                {isRegistering ? 'Signing Up...' : 'Sign Up'}
               </button>
             </div>
             <div className="text-center text-gray-600">
