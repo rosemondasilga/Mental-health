@@ -66,9 +66,9 @@ const Header: React.FC = () => {
           <li><Link to="/forum" onClick={closeDrawer}>Community Forum</Link></li>
          
         </ul>
-        <button className='text-white mt-8 inter bg-[#002266] py-2 px-4 rounded-full flex items-center'>Get Started
+        <Link to='/login' className='text-white mt-8 inter bg-[#002266] py-2 px-4 rounded-full flex items-center'>Get Started
         <FaArrowRight className="ml-2" /> {/* Arrow icon */}
-        </button>
+        </Link>
       
       </Drawer>
     </header>

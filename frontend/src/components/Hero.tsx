@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
           </p>
           <div className="flex space-x-4">
             <Link
-              to="/get-started"
+              to="/sign-up"
               className="bg-[#002266] text-white px-6 py-3 rounded-md font-medium hover:bg-blue-900 transition"
             >
               Get Started
