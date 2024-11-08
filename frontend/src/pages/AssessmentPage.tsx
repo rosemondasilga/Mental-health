@@ -8,7 +8,9 @@ import AssessmentAlert from '../components/AssessmentAlert';
 const AssessmentPage: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const [selectedAssessment, setSelectedAssessment] = useState<string | null>(null);
+  
+  // Explicitly typing the state to allow only these 4 values
+  const [selectedAssessment, setSelectedAssessment] = useState<'anxiety' | 'depression' | 'stress' | 'wellbeing' | null>(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -40,8 +42,8 @@ const AssessmentPage: React.FC = () => {
     { id: 'wellbeing', title: 'Well-being Assessment', description: 'Get insights into your overall mental well-being.' },
   ];
 
-  const handleCardClick = (assessmentId: string) => {
-    setSelectedAssessment(assessmentId);
+  const handleCardClick = (assessmentId: 'anxiety' | 'depression' | 'stress' | 'wellbeing') => {
+    setSelectedAssessment(assessmentId); // Now TypeScript knows the exact types
   };
 
   const closeForm = () => setSelectedAssessment(null);
@@ -67,7 +69,7 @@ const AssessmentPage: React.FC = () => {
             {assessments.map((assessment) => (
               <div
                 key={assessment.id}
-                onClick={() => handleCardClick(assessment.id)}
+                onClick={() => handleCardClick(assessment.id as 'anxiety' | 'depression' | 'stress' | 'wellbeing')}
                 className="bg-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-blue-50 transition"
               >
                 <h2 className="text-xl font-bold text-gray-800">{assessment.title}</h2>
