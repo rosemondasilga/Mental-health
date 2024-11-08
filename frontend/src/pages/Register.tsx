@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate for redirection after sign up
 import Header from '../components/Header';
 import { FcGoogle } from 'react-icons/fc'; // Google icon from react-icons
-import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../../../frontend/src/firebase/auth.js'; // Firebase functions
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth.js'; // Firebase functions
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('');

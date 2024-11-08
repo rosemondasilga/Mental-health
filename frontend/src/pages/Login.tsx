@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import Header from '../components/Header';
 import { FcGoogle } from "react-icons/fc";
-import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../../../frontend/src/firebase/auth.js';
+import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth.js';
 import { useAuth } from '../context/authContext/index.js';
+
+// Declare the module with an implicit 'any' type
+
 
 const Login: React.FC = () => {
   const { userLoggedIn } = useAuth();
@@ -68,6 +71,10 @@ const Login: React.FC = () => {
       } finally {
         setIsSigningIn(false);
       }
+    }
+    if (userLoggedIn) {
+      navigate('/dashboard');
+      return null; // Optionally return null to avoid rendering the login form
     }
   };
 

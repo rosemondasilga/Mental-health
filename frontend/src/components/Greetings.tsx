@@ -33,7 +33,7 @@ const Greeting: React.FC = () => {
   return (
     <div className="">
       <h1 className="text-2xl font-semibold text-gray-800">
-        {greeting}! <span className='text-[#002266] '>{currentUser.displayName ? currentUser.displayName : currentUser.email }</span>
+        {greeting}! <span className='text-[#002266] '>{currentUser?.displayName ?? currentUser?.email ?? 'Guest'}</span>
       </h1>
       <p className="text-gray-600">How are you feeling today?</p>
       <button className='mt-2 bg-[#002266] text-white p-2 rounded shadow-md'>Talk with someone?</button>

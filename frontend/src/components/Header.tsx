@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // If using react-router for navigation
-import { FaBars, FaArrowRight } from 'react-icons/fa'; // Import icons
+import {  FaArrowRight } from 'react-icons/fa'; // Import icons
 import { Drawer } from 'antd'; // Import antd Drawer and Button
 import 'antd/dist/reset.css'; // Ant Design CSS reset if not already imported
 import Logo from '../../public/mlogo.svg'; // Correct path for logo

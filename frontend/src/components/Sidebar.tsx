@@ -41,7 +41,7 @@ const Sidebar: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
             </Link>
           </li>
           <li>
-            <Link to="/assesments" className={`hover:bg-gray-500 hover:text-white block py-2 px-4 rounded ${isActive('/assesments') ? 'bg-gray-700 text-white' : ''}`}>
+            <Link to="/assessments" className={`hover:bg-gray-500 hover:text-white block py-2 px-4 rounded ${isActive('/assessments') ? 'bg-gray-700 text-white' : ''}`}>
           Assesments
             </Link>
           </li>

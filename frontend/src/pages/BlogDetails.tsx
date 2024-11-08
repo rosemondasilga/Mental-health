@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { IoMdArrowBack } from "react-icons/io";
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
-import { FaShareAlt, FaFont, FaRegClock } from 'react-icons/fa';
+import { FaShareAlt, FaRegClock } from 'react-icons/fa';
 import { FaUserCircle } from "react-icons/fa";
 import { TbCalendarPlus } from "react-icons/tb";
 import { RxSpeakerLoud } from "react-icons/rx";

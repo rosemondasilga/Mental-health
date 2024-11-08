@@ -2,16 +2,24 @@
 import React, { useState } from 'react';
 
 interface AssessmentFormProps {
-  assessmentType: string;
+  assessmentType: 'anxiety' | 'depression' | 'stress' | 'wellbeing'; // Union type for valid assessment types
   closeForm: () => void;
 }
+
+type Question = {
+  id: string;
+  text: string;
+  type: 'mcq' | 'slider' | 'number' | 'text'; // Add 'text' as a fallback for unsupported types
+  options?: string[];
+  range?: [number, number];
+};
 
 const AssessmentForm: React.FC<AssessmentFormProps> = ({ assessmentType, closeForm }) => {
   const [step, setStep] = useState(1);
   const [responses, setResponses] = useState<{ [key: string]: any }>({});
 
   // Questions with different input types
-  const questions = {
+  const questions: Record<string, Question[]> = {
     anxiety: [
       { id: 'q1', text: 'How often do you feel nervous or anxious?', type: 'mcq', options: ['Rarely', 'Sometimes', 'Often', 'Always'] },
       { id: 'q2', text: 'On a scale of 1-10, how would you rate your current anxiety level?', type: 'slider', range: [1, 10] },
@@ -49,12 +57,12 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({ assessmentType, closeFo
     }
   };
 
-  const renderQuestionInput = (question: any) => {
+  const renderQuestionInput = (question: Question) => {
     switch (question.type) {
       case 'mcq':
         return (
           <div className="mt-4">
-            {question.options.map((option: string) => (
+            {question.options?.map((option: string) => (
               <label key={option} className="block">
                 <input
                   type="radio"
@@ -74,14 +82,15 @@ const AssessmentForm: React.FC<AssessmentFormProps> = ({ assessmentType, closeFo
         return (
           <div className="mt-4">
             <input
+            title='form'
               type="range"
-              min={question.range[0]}
-              max={question.range[1]}
-              value={responses[question.id] || question.range[0]}
+              min={question.range ? question.range[0] : 0}
+              max={question.range ? question.range[1] : 10}
+              value={responses[question.id] || (question.range ? question.range[0] : 0)}
               onChange={(e) => handleAnswerChange(question.id, e.target.value)}
               className="w-full"
             />
-            <div className="text-center mt-2">{responses[question.id] || question.range[0]}</div>
+            <div className="text-center mt-2">{responses[question.id] || (question.range ? question.range[0] : 0)}</div>
           </div>
         );
 

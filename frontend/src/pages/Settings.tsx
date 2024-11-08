@@ -1,13 +1,23 @@
-// src/pages/Settings.tsx
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+
+// Define the type for the form data
+interface FormData {
+  username: string;
+  email: string;
+  notifications: boolean;
+  twoFactorAuth: boolean;
+  textSize: string;
+  colorTheme: string;
+  reminders: boolean;
+}
 
 const Settings: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: 'John Doe',
     email: 'johndoe@example.com',
     notifications: true,
@@ -17,10 +27,10 @@ const Settings: React.FC = () => {
     reminders: true,
   });
 
-  const handleToggle = (field: string) => {
+  const handleToggle = (field: keyof FormData) => {
     setFormData((prevData) => ({
       ...prevData,
-      [field]: !prevData[field],
+      [field]: !prevData[field], // TypeScript will now recognize the valid keys of FormData
     }));
   };
 
@@ -28,7 +38,7 @@ const Settings: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value, // Again, TypeScript knows 'name' is a valid key in FormData
     }));
   };
 
@@ -52,6 +62,7 @@ const Settings: React.FC = () => {
             <div>
               <label className="block text-gray-700">Username</label>
               <input
+              title='uname'
                 type="text"
                 name="username"
                 value={formData.username}
@@ -62,6 +73,7 @@ const Settings: React.FC = () => {
             <div>
               <label className="block text-gray-700">Email</label>
               <input
+               title='email'
                 type="email"
                 name="email"
                 value={formData.email}
@@ -77,6 +89,7 @@ const Settings: React.FC = () => {
             <div className="flex items-center gap-4">
               <label className="text-gray-700">Enable Two-Factor Authentication</label>
               <input
+              title='de'
                 type="checkbox"
                 checked={formData.twoFactorAuth}
                 onChange={() => handleToggle('twoFactorAuth')}
@@ -92,6 +105,8 @@ const Settings: React.FC = () => {
             <div className="flex items-center gap-4">
               <label className="text-gray-700">Color Theme</label>
               <select
+
+              title='color'
                 name="colorTheme"
                 value={formData.colorTheme}
                 onChange={handleChange}
@@ -110,6 +125,7 @@ const Settings: React.FC = () => {
             <div className="flex items-center gap-4">
               <label className="text-gray-700">Enable Reminders</label>
               <input
+              title='reminder'
                 type="checkbox"
                 checked={formData.reminders}
                 onChange={() => handleToggle('reminders')}

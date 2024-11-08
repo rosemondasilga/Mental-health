@@ -1,9 +1,9 @@
 // src/pages/FacilityDetails.tsx
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+
 
 const FacilityDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  
 
   // Mock facility data based on id
   const facility = {
@@ -35,9 +35,7 @@ const FacilityDetails: React.FC = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-semibold">{facility.name}</h1>
-        <p className="text-gray-500 mt-2">{facility.address}</p>
-        <p className="text-gray-700 mt-4">{facility.description}</p>
+     
 
         <h2 className="text-2xl font-semibold mt-6 mb-4">Book an Appointment</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
