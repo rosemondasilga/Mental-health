@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { auth } from '../firebase/firebase'; // Ensure firebase auth is imported
+import { updateProfile, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
-// Define the type for the form data
 interface FormData {
   username: string;
   email: string;
+  newPassword: string;
   notifications: boolean;
   twoFactorAuth: boolean;
   textSize: string;
@@ -17,9 +19,11 @@ const Settings: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
+  // Set initial state with placeholders
   const [formData, setFormData] = useState<FormData>({
-    username: 'John Doe',
-    email: 'johndoe@example.com',
+    username: '',
+    email: '',
+    newPassword: '',
     notifications: true,
     twoFactorAuth: false,
     textSize: 'medium',
@@ -27,10 +31,22 @@ const Settings: React.FC = () => {
     reminders: true,
   });
 
+  // Fetch user data on component mount
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setFormData((prevData) => ({
+        ...prevData,
+        username: user.displayName || 'User', // Default if no display name is set
+        email: user.email || '',
+      }));
+    }
+  }, []);
+
   const handleToggle = (field: keyof FormData) => {
     setFormData((prevData) => ({
       ...prevData,
-      [field]: !prevData[field], // TypeScript will now recognize the valid keys of FormData
+      [field]: !prevData[field],
     }));
   };
 
@@ -38,31 +54,61 @@ const Settings: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value, // Again, TypeScript knows 'name' is a valid key in FormData
+      [name]: value,
     }));
+  };
+
+  const handleSave = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        // Reauthenticate user before updating email or password
+        if (formData.newPassword) {
+          const credential = EmailAuthProvider.credential(user.email!, formData.newPassword);
+          await reauthenticateWithCredential(user, credential);
+        }
+
+        // Update Username
+        if (formData.username !== user.displayName) {
+          await updateProfile(user, { displayName: formData.username });
+        }
+
+        // Update Email (if changed)
+        if (formData.email !== user.email) {
+          await updateEmail(user, formData.email);
+          // Send verification email after updating email
+          await user.reload(); // Reload to ensure the email is updated before sending verification
+         
+        }
+
+        // Update Password (if new password is provided)
+        if (formData.newPassword) {
+          await updatePassword(user, formData.newPassword);
+        }
+
+        alert('Settings updated successfully!');
+      } catch (error) {
+        console.error('Error updating settings:', error);
+        alert('Error updating settings. Please try again.');
+      }
+    }
   };
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-y-auto">
-      {/* Sidebar */}
       <Sidebar isOpen={isSidebarOpen} />
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Navbar */}
         <Navbar toggleSidebar={toggleSidebar} />
-
-        {/* Settings Content */}
         <main className="flex-1 p-6 overflow-auto">
           <h1 className="text-2xl font-semibold">Settings</h1>
-
+          
           {/* Account Management */}
           <section className="mt-8 bg-white p-6 rounded-lg shadow-md space-y-4">
             <h2 className="text-xl font-semibold">Account Management</h2>
             <div>
               <label className="block text-gray-700">Username</label>
               <input
-              title='uname'
+                title="uname"
                 type="text"
                 name="username"
                 value={formData.username}
@@ -73,10 +119,21 @@ const Settings: React.FC = () => {
             <div>
               <label className="block text-gray-700">Email</label>
               <input
-               title='email'
+                title="email"
                 type="email"
                 name="email"
                 value={formData.email}
+                onChange={handleChange}
+                className="w-full p-2 border rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">New Password</label>
+              <input
+                title="newPassword"
+                type="password"
+                name="newPassword"
+                value={formData.newPassword}
                 onChange={handleChange}
                 className="w-full p-2 border rounded-lg focus:outline-none focus:border-blue-500"
               />
@@ -89,7 +146,7 @@ const Settings: React.FC = () => {
             <div className="flex items-center gap-4">
               <label className="text-gray-700">Enable Two-Factor Authentication</label>
               <input
-              title='de'
+                title="de"
                 type="checkbox"
                 checked={formData.twoFactorAuth}
                 onChange={() => handleToggle('twoFactorAuth')}
@@ -105,8 +162,7 @@ const Settings: React.FC = () => {
             <div className="flex items-center gap-4">
               <label className="text-gray-700">Color Theme</label>
               <select
-
-              title='color'
+                title="color"
                 name="colorTheme"
                 value={formData.colorTheme}
                 onChange={handleChange}
@@ -125,13 +181,23 @@ const Settings: React.FC = () => {
             <div className="flex items-center gap-4">
               <label className="text-gray-700">Enable Reminders</label>
               <input
-              title='reminder'
+                title="reminder"
                 type="checkbox"
                 checked={formData.reminders}
                 onChange={() => handleToggle('reminders')}
                 className="h-5 w-5 text-blue-600"
               />
             </div>
+          </section>
+
+          {/* Save Button */}
+          <section className="mt-8">
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Save Changes
+            </button>
           </section>
         </main>
       </div>

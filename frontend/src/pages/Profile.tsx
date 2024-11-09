@@ -1,33 +1,37 @@
 // src/pages/Profile.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import { FaUserCircle, FaEdit, FaEnvelope, FaHistory, FaListAlt } from 'react-icons/fa'; // Icons from react-icons
+import { FaUserCircle, FaEnvelope, FaHistory } from 'react-icons/fa';
+import { auth } from '../firebase/firebase'; // Import Firebase auth
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Profile: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  // State to hold user info from Firebase
+  const [user, setUser] = useState<{ displayName: string | null, email: string | null } | null>(null);
   const [loginHistory] = useState([
     { date: '2023-10-01', location: 'Bumbogo, Kigali', device: 'Chrome on Windows' },
     { date: '2023-09-15', location: 'Kibagabaga, Kigali', device: 'Safari on iPhone' },
     { date: '2023-08-25', location: 'Zindiro, Kigali', device: 'Firefox on Mac' },
-  ]);
-  const [activities] = useState([
-    { date: '2023-10-02', description: 'Completed mental wellness assessment.' },
-    { date: '2023-09-20', description: 'Viewed article on stress management.' },
-    { date: '2023-09-01', description: 'Joined community support group.' },
-  ]);
+  ]); // Assuming login history is not directly available through Firebase Authentication
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setProfileImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser({
+          displayName: currentUser.displayName,
+          email: currentUser.email,
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription on component unmount
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-y-auto">
@@ -44,32 +48,6 @@ const Profile: React.FC = () => {
           <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 space-y-8">
             <h1 className="text-2xl font-semibold">Profile</h1>
 
-            {/* Profile Picture */}
-            <section className="flex flex-col items-center space-y-4">
-              <div className="relative">
-                <img
-                  src={profileImage || 'https://img.freepik.com/premium-photo/high-quality-digital-image-wallpaper_783884-180002.jpg?w=740'}
-                  alt="Profile"
-                  className="w-32 h-32 rounded-full object-cover"
-                />
-                <label
-                  htmlFor="upload"
-                  className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer flex items-center"
-                >
-                  <FaEdit />
-                </label>
-                <input
-                aria-label='form'
-                  type="file"
-                  id="upload"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-              </div>
-              <p className="text-gray-600 text-sm">Change Profile Picture</p>
-            </section>
-
             {/* Account Information */}
             <section className="space-y-4">
               <h2 className="text-xl font-semibold flex items-center gap-2">
@@ -79,14 +57,14 @@ const Profile: React.FC = () => {
                 <FaUserCircle className="text-gray-600" />
                 <div>
                   <label className="block text-gray-700">Full Name</label>
-                  <p className="text-gray-600">John Doe</p>
+                  <p className="text-gray-600">{user?.displayName || 'John Doe'}</p> {/* Display Name */}
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <FaEnvelope className="text-gray-600" />
                 <div>
                   <label className="block text-gray-700">Email</label>
-                  <p className="text-gray-600">johndoe@example.com</p>
+                  <p className="text-gray-600">{user?.email || 'johndoe@example.com'}</p> {/* Email */}
                 </div>
               </div>
             </section>
@@ -105,24 +83,6 @@ const Profile: React.FC = () => {
                       <p className="text-gray-600 text-sm">
                         {entry.location} - {entry.device}
                       </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            {/* Recent Activities */}
-            <section className="space-y-4">
-              <h2 className="text-xl font-semibold flex items-center gap-2">
-                <FaListAlt /> Recent Activities
-              </h2>
-              <ul className="space-y-2">
-                {activities.map((activity, index) => (
-                  <li key={index} className="p-2 border rounded-lg bg-gray-50 flex items-center gap-4">
-                    <FaListAlt className="text-gray-500" />
-                    <div>
-                      <p className="text-gray-700 font-semibold">{activity.date}</p>
-                      <p className="text-gray-600 text-sm">{activity.description}</p>
                     </div>
                   </li>
                 ))}
