@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate for redirection after sign up
 import Header from '../components/Header';
 import { FcGoogle } from 'react-icons/fc'; // Google icon from react-icons
-import { doCreateUserWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth.js'; // Firebase functions
+import { doCreateUserWithEmailAndPassword, doSignInWithGoogle, doSendEmailVerification } from '../firebase/auth.js'; // Firebase functions
+import VerificationModal from '../components/VerificationModal.js';
+import { updateProfile } from 'firebase/auth';
+
 
 const SignUp: React.FC = () => {
   const [name, setName] = useState('');
@@ -11,6 +14,7 @@ const SignUp: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<any>({}); // Store validation errors
   const [isRegistering, setIsRegistering] = useState(false); // For tracking the loading state during registration
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const navigate = useNavigate(); // For redirecting after successful sign-up
 
   // Form validation logic
@@ -42,34 +46,27 @@ const SignUp: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const formErrors = validateForm();
     setErrors(formErrors);
-
+  
     if (Object.keys(formErrors).length === 0 && !isRegistering) {
       setIsRegistering(true);
       try {
-        // Create user using Firebase
-        await doCreateUserWithEmailAndPassword(email, password);
-        // After successful registration, navigate to the dashboard
-        navigate('/dashboard');
+        const userCredential = await doCreateUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        // Update the user's display name
+        await updateProfile(user, { displayName: name });
+        await doSendEmailVerification();
+        setIsModalOpen(true); // Open modal on success
       } catch (error: any) {
-        // Handle Firebase errors and show custom messages
-        if (error.code === 'auth/invalid-email') {
-          setErrors({ firebase: 'The email address is not valid. Please try again.' });
-        } else if (error.code === 'auth/wrong-password') {
-          setErrors({ firebase: 'Incorrect password. Please try again.' });
-        } else if (error.code === 'auth/email-already-in-use') {
-          setErrors({ firebase: 'This email is already in use. Please choose another one.' });
-        } else {
-          setErrors({ firebase: 'An error occurred. Please try again later.' });
-        }
+        if (error.code === 'auth/invalid-email') setErrors({ firebase: 'Invalid email address.' });
+        else if (error.code === 'auth/email-already-in-use') setErrors({ firebase: 'Email already in use.' });
+        else setErrors({ firebase: 'An error occurred. Please try again later.' });
       } finally {
         setIsRegistering(false);
       }
     }
   };
-
   // Google sign-in handler
   const onGoogleSignIn = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -185,6 +182,7 @@ const SignUp: React.FC = () => {
               </Link>
             </div>
           </form>
+          <VerificationModal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); navigate('/login'); }} />
         </div>
       </div>
     </div>

@@ -122,6 +122,7 @@ const Login: React.FC = () => {
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
+            <Link to='/forgot-password' className='text-right text-sm text-[#002266] font-semibold mt-4 flex justify-end'>Forgot Password?</Link>
             <button
               type="submit"
               className="w-full py-3 bg-[#002266] text-white font-semibold rounded-full hover:bg-[#001b4f] transition"
