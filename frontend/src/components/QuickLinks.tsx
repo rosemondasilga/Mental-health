@@ -14,7 +14,7 @@ const QuickLinks: React.FC = () => {
       <Link to="/support-group" className="bg-[#002266] text-white text-center py-4 rounded-lg shadow-md hover:bg-blue-900 transition">
         Join Support Group
       </Link>
-      <Link to="/assesments" className="bg-[#002266] text-white text-center py-4 rounded-lg shadow-md hover:bg-blue-900 transition">
+      <Link to="/assessments" className="bg-[#002266] text-white text-center py-4 rounded-lg shadow-md hover:bg-blue-900 transition">
        Assesments
       </Link>
       

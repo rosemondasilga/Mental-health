@@ -1,11 +1,8 @@
 import express from "express";
-
-//user model
 import User from "../models/user.js";
 
 const router = express.Router();
 
-// Post a User(for admins)
 router.post("/", async (req, res) => {
   let user = new User({
     name: req.body.name,
@@ -21,7 +18,6 @@ router.post("/", async (req, res) => {
   res.send(user);
 });
 
-// Register a User
 router.post("/signup", async (req, res) => {
   let user = new User({
     name: req.body.name,
@@ -39,5 +35,5 @@ router.post("/signup", async (req, res) => {
   res.send(user);
 });
 
-// Export the router
-export { router };
+// Export the router as default
+export default router;

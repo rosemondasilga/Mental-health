@@ -5,14 +5,15 @@ import { getAuth, Auth } from "firebase/auth";
 
 // Define the configuration object with the correct type for Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCOmBZW77o6hWAmAGVq7rP4q36EXnl-0-s",
-  authDomain: "mentalhelp-aaa0c.firebaseapp.com",
-  projectId: "mentalhelp-aaa0c",
-  storageBucket: "mentalhelp-aaa0c.firebasestorage.app",
-  messagingSenderId: "435247098697",
-  appId: "1:435247098697:web:907bd12e00e5418f530898",
-  measurementId: "G-Q3JJ8DZXXW"
+  apiKey: "AIzaSyD9Wtl8aa-y-qVTCeOhsktQ8OP-UBrHALo",
+  authDomain: "mental-help-app.firebaseapp.com",
+  projectId: "mental-help-app",
+  storageBucket: "mental-help-app.firebasestorage.app",
+  messagingSenderId: "298226457895",
+  appId: "1:298226457895:web:974282f0a974d237165d02",
+  measurementId: "G-1QJX3EBWML"
 };
+
 
 // Initialize Firebase
 const app: FirebaseApp = initializeApp(firebaseConfig);

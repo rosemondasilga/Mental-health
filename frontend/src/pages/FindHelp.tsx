@@ -19,7 +19,7 @@ const FindHelp: React.FC = () => {
     {
       id: '1',
       name: 'ALU Wellness Center',
-      address: 'Bumbogo, Kigali Innovation City, Next to Azam, RW',
+      address: 'African Leadership University, RW',
       phone: '+250-784-650-219',
       Email: 'wellness@alueducation.com',
       description: 'Creating a culture of curiosity for knowlegde, support for one another and urgency for wellness through our programs.',
@@ -45,8 +45,8 @@ const FindHelp: React.FC = () => {
   ];
 
   const emergencyContacts = [
-    { location: 'New York', contact: '911 or 555-111-2222' },
-    { location: 'San Francisco', contact: '911 or 555-333-4444' },
+    { location: 'African Leadership University', contact: '0784650219' },
+    { location: 'Rwanda Ambulance', contact: '112' },
   ];
 
   // Filtered facilities based on search and category

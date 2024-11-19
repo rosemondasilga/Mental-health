@@ -4,18 +4,28 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "start": "dotenvx run -- node server"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Before merging changes into the main branch, follow these steps to ensure your feature branch is up to date.\r **Important**: *Always check whether your branch is up to date with the main branch*:  \r ```bash\r git status\r ```",
   "dependencies": {
     "@dotenvx/dotenvx": "^1.16.0",
     "cors": "^2.8.5",
-    "express": "^4.21.0",
-    "mongodb": "6.9",
-    "mongoose": "^8.7.0"
+    "mongodb": "6.9"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "@jest/globals": "^29.7.0",
+    "babel-jest": "^29.7.0",
+    "express": "^4.21.1",
+    "jest": "^29.7.0",
+    "mongoose": "^8.8.1",
+    "supertest": "^7.0.0"
   }
 }
