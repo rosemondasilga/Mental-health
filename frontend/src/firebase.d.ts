@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/types/firebase.d.ts
 declare module '../../../frontend/src/firebase/auth.js' {
     import { UserCredential, User } from 'firebase/auth';
