@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../backend/tests"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "../backend/tests"]
 }
