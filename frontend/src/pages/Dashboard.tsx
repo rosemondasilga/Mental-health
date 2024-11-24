@@ -13,6 +13,12 @@ const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null); // Create a ref for the sidebar
 
+  // Declare state variables
+  const [activeUsers, setActiveUsers] = useState(20);
+  const [sessionsCompleted, setSessionsCompleted] = useState(5);
+  const [resourcesAvailable, setResourcesAvailable] = useState(4);
+  const [upcomingAppointments, setUpcomingAppointments] = useState(3);
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -38,6 +44,19 @@ const Dashboard: React.FC = () => {
     };
   }, [isSidebarOpen]);
 
+  // Handle card click event
+  const handleCardClick = (metric: string) => {
+    if (metric === 'Active Users') {
+      setActiveUsers(prev => prev + 1); // Increment Active Users
+    } else if (metric === 'Sessions Completed') {
+      setSessionsCompleted(prev => prev + 1); // Increment Sessions Completed
+    } else if (metric === 'Resources Available') {
+      setResourcesAvailable(prev => prev + 1); // Increment Resources Available
+    } else if (metric === 'Upcoming Appointments') {
+      setUpcomingAppointments(prev => prev + 1); // Increment Upcoming Appointments
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 overflow-y-auto">
       {/* Sidebar */}
@@ -58,23 +77,27 @@ const Dashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
             <MetricCard 
               title="Active Users" 
-              value="1,245" 
-              icon={<FaUsers size={40} />} 
+              value="20" 
+              icon={<FaUsers size={40} />}
+              onClick={() => handleCardClick('Active Users')} // Add onClick handler 
             />
             <MetricCard 
               title="Sessions Completed" 
-              value="345" 
-              icon={<FaCheckCircle size={40} />} 
+              value="5" 
+              icon={<FaCheckCircle size={40} />}
+              onClick={() => handleCardClick('Sessions Completed')} // Add onClick handler 
             />
             <MetricCard 
               title="Resources Available" 
-              value="32" 
-              icon={<FaClipboardList size={40} />} 
+              value="4" 
+              icon={<FaClipboardList size={40} />}
+              onClick={() => handleCardClick('Resources Available')} // Add onClick handler 
             />
             <MetricCard 
               title="Upcoming Appointments" 
-              value="12" 
-              icon={<FaCalendarAlt size={40} />} 
+              value="3" 
+              icon={<FaCalendarAlt size={40} />}
+              onClick={() => handleCardClick('Upcoming Appointments')} // Add onClick handler 
             />
           </div>
 

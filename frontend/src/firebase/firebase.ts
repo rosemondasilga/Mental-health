@@ -5,7 +5,7 @@ import { getAuth, Auth } from "firebase/auth";
 
 // Define the configuration object with the correct type for Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
+  apiKey: "AIzaSyD9Wtl8aa-y-qVTCeOhsktQ8OP-UBrHALo",
   authDomain: "mental-help-app.firebaseapp.com",
   projectId: "mental-help-app",
   storageBucket: "mental-help-app.firebasestorage.app",

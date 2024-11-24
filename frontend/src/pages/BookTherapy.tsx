@@ -49,6 +49,17 @@ const BookTherapy: React.FC = () => {
         {/* How It Works */}
         <section className="space-y-2">
           <p className="text-gray-600">Fill in your details, select a date, time, and type of therapy. Once you submit the form, you'll receive a confirmation message and we will match you with the best doctors who will reach out to you via chat</p>
+        
+        Alternatively, you can {''}
+        <a
+  href="https://calendly.com/r-asilga-alustudent"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-blue-600 underline"
+>
+  book a session directly through our Calendly page
+</a>{''}
+and receive email notifications Instantly.
         </section>
         
         <form onSubmit={handleSubmit} className="space-y-4">

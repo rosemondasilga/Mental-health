@@ -5,6 +5,7 @@ interface MetricCardProps {
   title: string;
   value: string;
   icon: React.ReactNode;
+  onClick: () => void; // Add onClick prop type
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ title, value, icon }) => {

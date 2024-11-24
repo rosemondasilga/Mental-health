@@ -1,7 +1,7 @@
 // src/pages/JoinSupportGroup.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaWhatsapp, FaTelegram, FaDiscord } from 'react-icons/fa';
+import { FaWhatsapp, FaTelegram, FaInstagram } from 'react-icons/fa';
 
 const JoinSupportGroup: React.FC = () => {
   const navigate = useNavigate();
@@ -17,22 +17,22 @@ const JoinSupportGroup: React.FC = () => {
     {
       id: 'whatsapp',
       name: 'WhatsApp',
-      link: 'https://chat.whatsapp.com/example',
+      link: 'https://chat.whatsapp.com/K2poeo2YW9WGDge7sGIyX4',
       icon: <FaWhatsapp size={20} className="mr-2" />,
       color: '#25D366',
     },
     {
       id: 'telegram',
       name: 'Telegram',
-      link: 'https://t.me/example',
+      link: 'https://t.me/+ZCGsmRyiUsM5MjU0',
       icon: <FaTelegram size={20} className="mr-2" />,
       color: '#0088cc',
     },
     {
-      id: 'discord',
-      name: 'Discord',
-      link: 'https://discord.com/invite/example',
-      icon: <FaDiscord size={20} className="mr-2" />,
+      id: 'Instagram',
+      name: 'Instagram',
+      link: 'https://www.instagram.com/nutricare_gh/profilecard/?igsh=MTNzeXgxaWVnOGtyOQ==',
+      icon: <FaInstagram size={20} className="mr-2" />,
       color: '#5865F2',
     },
   ];
